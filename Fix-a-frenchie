@@ -1,0 +1,64 @@
+title: "Specials"
+author: "Patrice Wilson-Neil"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#Do drink specials increase overall sales?
+```
+
+```{r}
+library(readxl)
+FCB_SALES_2024 <- read_excel("SPECIALS INCREASE/FCB SALES 2024.xlsx")
+```
+
+
+```{r}
+#2024 SALES
+head(FCB_SALES_2024)
+```
+
+```{r}
+#Change the tibble to a data frame
+FCB_SALES_2024 <- as.data.frame(FCB_SALES_2024)
+
+head(FCB_SALES_2024)
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+```
+
+```{r}
+FCB_SALES_2024 <- FCB_SALES_2024 %>%
+  group_by(MONTH, `LATTE SPECIAL`) %>%
+  summarise(total_sales = sum(`GROSS SALES`), .groups = "drop")
+```
+
+```{r}
+#SALES VISUALLY
+ggplot(FCB_SALES_2024, aes(x = MONTH, y = total_sales, color = `LATTE SPECIAL`)) +
+  geom_line(size = 1) +
+  labs(
+    title = "Sales Trends Over One Year: Specials vs No Specials",
+    x = "Month",
+    y = "total_sales",
+    color = "Latte Special"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+#SALES VISUALLY
+ggplot(FCB_SALES_2024, aes(x = MONTH, y = total_sales, fill = `LATTE SPECIAL`)) +
+  geom_boxplot() +
+  labs(title = "Sales Trends Over One Year: Specials vs No Specials",
+       x = "Month", y = "Total Sales") +
+  theme_minimal()
+```
